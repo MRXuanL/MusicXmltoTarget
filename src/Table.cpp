@@ -46,13 +46,13 @@ Table::Table(string &filename){
                     }
                 }
                 _dt=60.0/_tempo;
-                XMLElement* note=measure->FirstChildElement("note");
-
+                XMLElement* note=measure->FirstChildElement("note");//小节里的第一个note
+                _measureStartTime=_time;
                 while(note){
                     XMLElement* staff=note->FirstChildElement("staff");
                     if(staff){
                         int row=staff->IntText();
-                        if(row!=1){
+                        if(row!=1){//六线谱在五线谱的下面
                             Note n=processnote(note);
                             if(n.duration!=-1) _notelist.push_back(n);
                         }
@@ -73,6 +73,7 @@ Note Table::processnote(XMLElement *note){
     double duration=-1,add=0;
     XMLElement* chord=note->FirstChildElement("chord");
     XMLElement* notations=note->FirstChildElement("notations");
+    XMLElement* voice=note->FirstChildElement("voice");
     if(notations){
         XMLElement* technical=notations->FirstChildElement("technical");
         if(technical){
@@ -92,9 +93,16 @@ Note Table::processnote(XMLElement *note){
             }
         }
     }
-    int dur=-1;
+    int dur=-1,vce=-1;
     XMLElement* dura=note->FirstChildElement("duration");
     //当上一个是chord时，且这一个不是chord时，time+=_add
+    if(voice){
+        vce=voice->IntText();
+        if(_curVoice!=vce) {
+            _time=_measureStartTime;
+            _curVoice=vce;
+        }
+    }
     if(dura){
         dur=dura->IntText();
         duration=(1.0*dur/_division)*_dt;

@@ -20,5 +20,7 @@ class Table{
         double _add=0;
         double _lasttime=0;
         double _dt;
+        double _measureStartTime;
+        int _curVoice=0;
         vector<Note>_notelist;
 };
