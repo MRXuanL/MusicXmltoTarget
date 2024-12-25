@@ -12,12 +12,14 @@ class Note{
         }
         bool operator<(const Note &other)const{
             if(abs(this->time-other.time)>0.0001) return this->time<other.time;
-            return this->str>other.str;
+            if(this->fret!=other.fret) return this->fret<other.fret;
+            if(this->str!=other.str) return this->str>other.str;
+            if(abs(this->duration-other.duration)>0.0001) return this->duration>other.duration;
+            return this->duration<other.duration;
         }
 
         bool operator==(const Note &other)const{
             return abs(this->time-other.time)<0.0001
-            &&abs(this->duration-other.duration)<0.0001
             &&this->str==other.str&&this->fret==other.fret;
         }
 

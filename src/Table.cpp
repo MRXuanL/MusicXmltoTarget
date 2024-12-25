@@ -1,6 +1,7 @@
 #include <iostream>
 #include "tinyxml2.h"
 #include "Table.h"
+#include <algorithm>
 using namespace tinyxml2;
 using namespace std;
 
@@ -67,6 +68,9 @@ Table::Table(string &filename){
         
     }
     _notenum=_notelist.size();
+    sort(_notelist.begin(),_notelist.end());
+    auto last = unique(_notelist.begin(),_notelist.end());
+    _notelist.erase(last,_notelist.end());
 }
 Note Table::processnote(XMLElement *note){
     int string=-1,fret=-1;
